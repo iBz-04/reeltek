@@ -1,0 +1,5 @@
+flask==3.0.0
+flask-cors==4.0.0
+pyttsx3==2.90
+gtts==2.5.0
+pygame==2.5.2 

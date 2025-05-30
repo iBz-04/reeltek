@@ -401,6 +401,28 @@
                     <textarea id="responseText" readonly placeholder="Analysis results will appear here..."></textarea>
                 </div>
 
+                <div class="input-group">
+                    <label for="speechToggle">
+                        <input type="checkbox" id="speechToggle" style="width: auto; margin-right: 8px;">
+                        Enable Speech Output
+                    </label>
+                    <div id="speechControls" style="display: none; margin-top: 10px;">
+                        <select id="voiceSelect" style="width: 100%; margin-bottom: 10px;">
+                            <option value="">Default Voice</option>
+                        </select>
+                        <div style="display: flex; gap: 10px;">
+                            <div style="flex: 1;">
+                                <label for="volumeSlider" style="font-size: 0.75rem;">Volume</label>
+                                <input type="range" id="volumeSlider" min="0" max="1" step="0.1" value="0.8" style="width: 100%;">
+                            </div>
+                            <div style="flex: 1;">
+                                <label for="rateSlider" style="font-size: 0.75rem;">Speed</label>
+                                <input type="range" id="rateSlider" min="0.5" max="2" step="0.1" value="1" style="width: 100%;">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="action-controls">
                     <select id="intervalSelect" name="Interval">
                         <option value="100">100ms</option>
@@ -470,6 +492,12 @@
         const errorCount = document.getElementById('errorCount');
         const systemLog = document.getElementById('systemLog');
 
+        const speechToggle = document.getElementById('speechToggle');
+        const speechControls = document.getElementById('speechControls');
+        const voiceSelect = document.getElementById('voiceSelect');
+        const volumeSlider = document.getElementById('volumeSlider');
+        const rateSlider = document.getElementById('rateSlider');
+
         instructionText.value = "Analyze the scene and describe what you see.";
 
         let stream;
@@ -480,6 +508,93 @@
         let totalFrames = 0;
         let totalErrors = 0;
         let lastProcessTime = 0;
+        let lastSpokenText = '';
+        let speechQueue = [];
+        let isSpeaking = false;
+
+        function loadVoices() {
+            const voices = speechSynthesis.getVoices();
+            voiceSelect.innerHTML = '<option value="">Default Voice</option>';
+            
+            voices.forEach((voice, index) => {
+                const option = document.createElement('option');
+                option.value = index;
+                option.textContent = `${voice.name} (${voice.lang})`;
+                if (voice.default) {
+                    option.textContent += ' - Default';
+                }
+                voiceSelect.appendChild(option);
+            });
+            
+            addLogEntry('SPEECH', `Loaded ${voices.length} voices`);
+        }
+
+        speechSynthesis.addEventListener('voiceschanged', loadVoices);
+        loadVoices();
+
+        speechToggle.addEventListener('change', (e) => {
+            speechControls.style.display = e.target.checked ? 'block' : 'none';
+            if (!e.target.checked && speechSynthesis.speaking) {
+                speechSynthesis.cancel();
+                speechQueue = [];
+                isSpeaking = false;
+            }
+            addLogEntry('SPEECH', e.target.checked ? 'Speech output enabled' : 'Speech output disabled');
+        });
+
+        function speakText(text) {
+            if (!speechToggle.checked || !text || text === lastSpokenText) {
+                return;
+            }
+
+            if (text.length > 200) {
+                text = text.substring(0, 200) + '...';
+            }
+
+            speechQueue.push(text);
+            lastSpokenText = text;
+            
+            if (!isSpeaking) {
+                processNextInQueue();
+            }
+        }
+
+        function processNextInQueue() {
+            if (speechQueue.length === 0) {
+                isSpeaking = false;
+                return;
+            }
+
+            if (speechQueue.length > 3) {
+                speechQueue = [speechQueue[speechQueue.length - 1]];
+            }
+
+            isSpeaking = true;
+            const text = speechQueue.shift();
+            
+            const utterance = new SpeechSynthesisUtterance(text);
+            
+            const selectedVoiceIndex = voiceSelect.value;
+            if (selectedVoiceIndex) {
+                const voices = speechSynthesis.getVoices();
+                utterance.voice = voices[selectedVoiceIndex];
+            }
+            
+            utterance.volume = parseFloat(volumeSlider.value);
+            utterance.rate = parseFloat(rateSlider.value);
+            
+            utterance.onend = () => {
+                processNextInQueue();
+            };
+            
+            utterance.onerror = (event) => {
+                addLogEntry('ERROR', `Speech synthesis error: ${event.error}`);
+                isSpeaking = false;
+                speechQueue = [];
+            };
+            
+            speechSynthesis.speak(utterance);
+        }
 
         function updateStatus(element, status) {
             element.className = `status-dot status-${status}`;
@@ -613,6 +728,8 @@
                 updateStatus(processingStatus, 'online');
                 totalFrames++;
                 addLogEntry('PROCESS', `Frame ${totalFrames} analyzed successfully`);
+                
+                speakText(response);
             } catch (error) {
                 console.error('Error sending data:', error);
                 responseText.value = `Error: ${error.message}`;
@@ -666,6 +783,12 @@
             if (sessionTimerInterval) {
                 clearInterval(sessionTimerInterval);
                 sessionTimerInterval = null;
+            }
+
+            if (speechSynthesis.speaking) {
+                speechSynthesis.cancel();
+                speechQueue = [];
+                isSpeaking = false;
             }
 
             startButton.textContent = "Start Analysis";
