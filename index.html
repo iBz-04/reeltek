@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ReelTek Enterprise Vision System</title>
+    <title>ReelTek Vision System</title>
     <style>
         :root {
             --primary-bg: #2b2d31;
@@ -180,13 +180,14 @@
             color: var(--text-muted);
             text-transform: uppercase;
             font-weight: 500;
-            font-size: 0.75rem;
+            font-size: 0.65rem;
             letter-spacing: 0.3px;
         }
 
         .metric-value {
             font-weight: 600;
             font-family: 'Consolas', 'Courier New', monospace;
+            font-size: 0.8rem;
         }
 
         .input-group {
@@ -358,7 +359,7 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>ReelTek Enterprise Vision System</h1>
+            <h1>ReelTek Vision System</h1>
             <div class="status-bar">
                 <div class="status-indicator">
                     <div class="status-dot status-online" id="cameraStatus"></div>
@@ -417,23 +418,23 @@
                 
                 <div class="metric-group">
                     <div class="metric">
-                        <span class="metric-label">Frames Processed</span>
+                        <span class="metric-label">Frames</span>
                         <span class="metric-value" id="frameCount">0</span>
                     </div>
                     <div class="metric">
-                        <span class="metric-label">Processing Rate</span>
+                        <span class="metric-label">Rate</span>
                         <span class="metric-value" id="processingRate">0 fps</span>
                     </div>
                     <div class="metric">
-                        <span class="metric-label">Last Response Time</span>
+                        <span class="metric-label">Response</span>
                         <span class="metric-value" id="responseTime">0ms</span>
                     </div>
                     <div class="metric">
-                        <span class="metric-label">Session Duration</span>
+                        <span class="metric-label">Duration</span>
                         <span class="metric-value" id="sessionTime">00:00:00</span>
                     </div>
                     <div class="metric">
-                        <span class="metric-label">Error Count</span>
+                        <span class="metric-label">Errors</span>
                         <span class="metric-value" id="errorCount">0</span>
                     </div>
                 </div>
