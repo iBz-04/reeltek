@@ -3,33 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ReelTek</title>
+    <title>ReelTek Enterprise Vision System</title>
     <style>
         :root {
-            --primary-bg: #1a1b1e;
-            --secondary-bg: #2a2b2e;
-            --border-color: #3a3b3e;
-            --text-color: #e0e0e0;
-            --text-muted: #a0a0a0;
-            --accent-color: #64b5f6;
-            --success-color: #4caf50;
-            --danger-color: #f44336;
-            --shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
-            --input-bg: #2f3033;
+            --primary-bg: #2b2d31;
+            --secondary-bg: #36393f;
+            --tertiary-bg: #40444b;
+            --border-color: #4f545c;
+            --border-dark: #72767d;
+            --text-color: #dcddde;
+            --text-muted: #b9bbbe;
+            --accent-color: #5865f2;
+            --accent-hover: #4752c4;
+            --success-color: #3ba55c;
+            --success-hover: #2d7d32;
+            --danger-color: #ed4245;
+            --danger-hover: #c62828;
+            --warning-color: #faa61a;
+            --shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+            --shadow-elevated: 0 4px 8px rgba(0, 0, 0, 0.4);
+            --input-bg: #40444b;
+            --status-online: #23a55a;
+            --status-offline: #f23f43;
         }
 
         body {
-            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            font-family: 'Segoe UI', 'Roboto', 'Arial', sans-serif;
             margin: 0;
             min-height: 100vh;
             padding: 20px 0;
             background-color: var(--primary-bg);
             color: var(--text-color);
-            line-height: 1.6;
+            line-height: 1.4;
+            font-size: 14px;
         }
 
         .container {
-            max-width: 1400px;
+            max-width: 1800px;
             margin: 0 auto;
             display: flex;
             flex-direction: column;
@@ -37,35 +47,79 @@
             padding: 0 20px;
         }
 
-        h1 {
-            font-size: 1.8rem;
-            font-weight: 600;
-            margin: 0 0 15px 0;
-            color: var(--accent-color);
-            text-align: center;
-            letter-spacing: -0.5px;
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--secondary-bg);
+            padding: 15px 20px;
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow);
         }
+
+        h1 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin: 0;
+            color: var(--text-color);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .status-bar {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+
+        .status-online { background-color: var(--status-online); }
+        .status-offline { background-color: var(--status-offline); }
+        .status-warning { background-color: var(--warning-color); }
 
         .main-content {
             display: grid;
-            grid-template-columns: 1.5fr 1fr;
-            gap: 30px;
+            grid-template-columns: 1.6fr 0.8fr 0.3fr;
+            gap: 20px;
             align-items: start;
         }
 
         .video-section {
             background: var(--secondary-bg);
             padding: 0;
-            border-radius: 16px;
+            border: 1px solid var(--border-color);
             box-shadow: var(--shadow);
             overflow: hidden;
+        }
+
+        .video-header {
+            background: var(--tertiary-bg);
+            padding: 12px 15px;
+            border-bottom: 1px solid var(--border-color);
+            font-weight: 600;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         #videoFeed {
             width: 100%;
             height: 100%;
             aspect-ratio: 16/9;
-            border-radius: 0;
             background-color: #000000;
             border: none;
             display: block;
@@ -74,111 +128,199 @@
 
         .controls-section {
             background: var(--secondary-bg);
-            padding: 30px;
-            border-radius: 16px;
+            padding: 20px;
+            border: 1px solid var(--border-color);
             box-shadow: var(--shadow);
             display: flex;
             flex-direction: column;
-            gap: 25px;
+            gap: 20px;
+        }
+
+        .section-header {
+            background: var(--tertiary-bg);
+            padding: 10px 15px;
+            margin: -20px -20px 15px -20px;
+            border-bottom: 1px solid var(--border-color);
+            font-weight: 600;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .system-panel {
+            background: var(--secondary-bg);
+            padding: 20px;
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow);
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .metric-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .metric {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 0.85rem;
+        }
+
+        .metric:last-child {
+            border-bottom: none;
+        }
+
+        .metric-label {
+            color: var(--text-muted);
+            text-transform: uppercase;
+            font-weight: 500;
+            font-size: 0.75rem;
+            letter-spacing: 0.3px;
+        }
+
+        .metric-value {
+            font-weight: 600;
+            font-family: 'Consolas', 'Courier New', monospace;
         }
 
         .input-group {
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 8px;
         }
 
         label {
-            font-weight: 500;
-            color: var(--accent-color);
-            font-size: 0.95rem;
-            letter-spacing: 0.3px;
+            font-weight: 600;
+            color: var(--text-color);
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         input, textarea, select {
-            padding: 14px;
+            padding: 10px 12px;
             border: 1px solid var(--border-color);
-            border-radius: 10px;
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             background: var(--input-bg);
             color: var(--text-color);
-            transition: all 0.2s ease;
+            transition: border-color 0.2s ease;
+            font-family: inherit;
         }
 
         input:focus, textarea:focus, select:focus {
             outline: none;
             border-color: var(--accent-color);
-            box-shadow: 0 0 0 2px rgba(100, 181, 246, 0.2);
+            box-shadow: inset 0 0 0 1px var(--accent-color);
         }
 
         textarea {
             resize: vertical;
             min-height: 80px;
-            line-height: 1.6;
+            line-height: 1.4;
         }
 
         #responseText {
-            background-color: var(--input-bg);
-            font-family: 'Consolas', 'Monaco', monospace;
+            background-color: var(--tertiary-bg);
+            font-family: 'Consolas', 'Courier New', monospace;
+            font-size: 0.85rem;
+            min-height: 120px;
         }
 
         .action-controls {
             display: flex;
-            gap: 15px;
+            gap: 10px;
             align-items: center;
             margin-top: 10px;
         }
 
         select {
-            padding: 12px;
+            padding: 10px 12px;
             min-width: 120px;
             cursor: pointer;
+            background-color: var(--input-bg);
         }
 
         #startButton {
-            padding: 14px 28px;
-            font-size: 1rem;
-            font-weight: 500;
-            border: none;
-            border-radius: 10px;
+            padding: 12px 24px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            border: 1px solid;
             cursor: pointer;
             transition: all 0.2s ease;
             flex: 1;
             text-transform: uppercase;
             letter-spacing: 0.5px;
+            font-family: inherit;
         }
 
         #startButton.start {
             background-color: var(--success-color);
             color: white;
+            border-color: var(--success-color);
         }
 
         #startButton.stop {
             background-color: var(--danger-color);
             color: white;
+            border-color: var(--danger-color);
         }
 
-        #startButton:hover {
-            transform: translateY(-2px);
-            filter: brightness(1.1);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        #startButton.start:hover {
+            background-color: var(--success-hover);
+            border-color: var(--success-hover);
         }
 
-        #startButton:active {
-            transform: translateY(0);
+        #startButton.stop:hover {
+            background-color: var(--danger-hover);
+            border-color: var(--danger-hover);
+        }
+
+        .log-section {
+            max-height: 200px;
+            overflow-y: auto;
+            background: var(--tertiary-bg);
+            border: 1px solid var(--border-color);
+            padding: 10px;
+            font-family: 'Consolas', 'Courier New', monospace;
+            font-size: 0.75rem;
+        }
+
+        .log-entry {
+            margin-bottom: 4px;
+            color: var(--text-muted);
+        }
+
+        .log-timestamp {
+            color: var(--accent-color);
         }
 
         .hidden {
             display: none;
         }
 
-        @media (max-width: 1200px) {
+        @media (max-width: 1400px) {
+            .main-content {
+                grid-template-columns: 1fr 1fr;
+            }
+            
+            .system-panel {
+                grid-column: span 2;
+            }
+        }
+
+        @media (max-width: 1000px) {
             .main-content {
                 grid-template-columns: 1fr;
             }
             
-            body {
-                padding: 20px;
+            .system-panel {
+                grid-column: span 1;
             }
 
             #videoFeed {
@@ -188,51 +330,74 @@
 
         ::placeholder {
             color: var(--text-muted);
+            font-style: italic;
         }
 
         ::-webkit-scrollbar {
-            width: 10px;
+            width: 8px;
         }
 
         ::-webkit-scrollbar-track {
-            background: var(--input-bg);
-            border-radius: 5px;
+            background: var(--tertiary-bg);
         }
 
         ::-webkit-scrollbar-thumb {
             background: var(--border-color);
-            border-radius: 5px;
         }
 
         ::-webkit-scrollbar-thumb:hover {
             background: var(--accent-color);
         }
+
+        select option {
+            background: var(--input-bg);
+            color: var(--text-color);
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>ReelTek</h1>
+        <div class="header">
+            <h1>ReelTek Enterprise Vision System</h1>
+            <div class="status-bar">
+                <div class="status-indicator">
+                    <div class="status-dot status-online" id="cameraStatus"></div>
+                    <span>Camera</span>
+                </div>
+                <div class="status-indicator">
+                    <div class="status-dot status-offline" id="serverStatus"></div>
+                    <span>Server</span>
+                </div>
+                <div class="status-indicator">
+                    <div class="status-dot status-offline" id="processingStatus"></div>
+                    <span>Processing</span>
+                </div>
+            </div>
+        </div>
         
         <div class="main-content">
             <div class="video-section">
+                <div class="video-header">Live Video Feed</div>
                 <video id="videoFeed" autoplay playsinline></video>
                 <canvas id="canvas" class="hidden"></canvas>
             </div>
 
             <div class="controls-section">
+                <div class="section-header">Control Panel</div>
+                
                 <div class="input-group">
-                    <label for="baseURL">Base API</label>
+                    <label for="baseURL">API Endpoint</label>
                     <input id="baseURL" type="text" value="http://localhost:8080">
                 </div>
 
                 <div class="input-group">
-                    <label for="instructionText">Instruction</label>
-                    <textarea id="instructionText" placeholder="Enter your instruction here..."></textarea>
+                    <label for="instructionText">Vision Instruction</label>
+                    <textarea id="instructionText" placeholder="Enter analysis instruction..."></textarea>
                 </div>
 
                 <div class="input-group">
-                    <label for="responseText">Response</label>
-                    <textarea id="responseText" readonly placeholder="Server response will appear here..."></textarea>
+                    <label for="responseText">AI Response</label>
+                    <textarea id="responseText" readonly placeholder="Analysis results will appear here..."></textarea>
                 </div>
 
                 <div class="action-controls">
@@ -243,7 +408,43 @@
                         <option value="1000">1s</option>
                         <option value="2000">2s</option>
                     </select>
-                    <button id="startButton" class="start">Start</button>
+                    <button id="startButton" class="start">Start Analysis</button>
+                </div>
+            </div>
+
+            <div class="system-panel">
+                <div class="section-header">System Monitor</div>
+                
+                <div class="metric-group">
+                    <div class="metric">
+                        <span class="metric-label">Frames Processed</span>
+                        <span class="metric-value" id="frameCount">0</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">Processing Rate</span>
+                        <span class="metric-value" id="processingRate">0 fps</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">Last Response Time</span>
+                        <span class="metric-value" id="responseTime">0ms</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">Session Duration</span>
+                        <span class="metric-value" id="sessionTime">00:00:00</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">Error Count</span>
+                        <span class="metric-value" id="errorCount">0</span>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label>System Log</label>
+                    <div class="log-section" id="systemLog">
+                        <div class="log-entry">
+                            <span class="log-timestamp">[SYSTEM]</span> Vision system initialized
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -258,49 +459,123 @@
         const intervalSelect = document.getElementById('intervalSelect');
         const startButton = document.getElementById('startButton');
 
-        instructionText.value = "What do you see?"; 
+        const cameraStatus = document.getElementById('cameraStatus');
+        const serverStatus = document.getElementById('serverStatus');
+        const processingStatus = document.getElementById('processingStatus');
+        const frameCount = document.getElementById('frameCount');
+        const processingRate = document.getElementById('processingRate');
+        const responseTime = document.getElementById('responseTime');
+        const sessionTime = document.getElementById('sessionTime');
+        const errorCount = document.getElementById('errorCount');
+        const systemLog = document.getElementById('systemLog');
+
+        instructionText.value = "Analyze the scene and describe what you see.";
 
         let stream;
         let intervalId;
+        let sessionStartTime;
+        let sessionTimerInterval;
         let isProcessing = false;
+        let totalFrames = 0;
+        let totalErrors = 0;
+        let lastProcessTime = 0;
 
-    
-        async function sendChatCompletionRequest(instruction, imageBase64URL) {
-            const response = await fetch(`${baseURL.value}/v1/chat/completions`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    max_tokens: 100,
-                    messages: [
-                        { role: 'user', content: [
-                            { type: 'text', text: instruction },
-                            { type: 'image_url', image_url: {
-                                url: imageBase64URL,
-                            } }
-                        ] },
-                    ]
-                })
-            });
-            if (!response.ok) {
-                const errorData = await response.text();
-                return `Server error: ${response.status} - ${errorData}`;
-            }
-            const data = await response.json();
-            return data.choices[0].message.content;
+        function updateStatus(element, status) {
+            element.className = `status-dot status-${status}`;
         }
 
-        
+        function addLogEntry(type, message) {
+            const timestamp = new Date().toLocaleTimeString();
+            const logEntry = document.createElement('div');
+            logEntry.className = 'log-entry';
+            logEntry.innerHTML = `<span class="log-timestamp">[${timestamp}] [${type}]</span> ${message}`;
+            systemLog.appendChild(logEntry);
+            systemLog.scrollTop = systemLog.scrollHeight;
+
+            if (systemLog.children.length > 50) {
+                systemLog.removeChild(systemLog.firstChild);
+            }
+        }
+
+        function updateSessionTimer() {
+            if (sessionStartTime) {
+                const elapsed = Date.now() - sessionStartTime;
+                const hours = Math.floor(elapsed / 3600000);
+                const minutes = Math.floor((elapsed % 3600000) / 60000);
+                const seconds = Math.floor((elapsed % 60000) / 1000);
+                sessionTime.textContent = 
+                    `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            }
+        }
+
+        function updateMetrics() {
+            frameCount.textContent = totalFrames;
+            errorCount.textContent = totalErrors;
+            
+            if (isProcessing && intervalSelect.value) {
+                const expectedFPS = 1000 / parseInt(intervalSelect.value);
+                processingRate.textContent = `${expectedFPS.toFixed(1)} fps`;
+            } else {
+                processingRate.textContent = '0 fps';
+            }
+        }
+
+        async function sendChatCompletionRequest(instruction, imageBase64URL) {
+            const startTime = Date.now();
+            
+            try {
+                const response = await fetch(`${baseURL.value}/v1/chat/completions`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        max_tokens: 150,
+                        messages: [
+                            { role: 'user', content: [
+                                { type: 'text', text: instruction },
+                                { type: 'image_url', image_url: {
+                                    url: imageBase64URL,
+                                } }
+                            ] },
+                        ]
+                    })
+                });
+
+                const endTime = Date.now();
+                lastProcessTime = endTime - startTime;
+                responseTime.textContent = `${lastProcessTime}ms`;
+
+                if (!response.ok) {
+                    updateStatus(serverStatus, 'offline');
+                    const errorData = await response.text();
+                    throw new Error(`Server error: ${response.status} - ${errorData}`);
+                }
+
+                updateStatus(serverStatus, 'online');
+                const data = await response.json();
+                return data.choices[0].message.content;
+
+            } catch (error) {
+                updateStatus(serverStatus, 'offline');
+                throw error;
+            }
+        }
+
         async function initCamera() {
             try {
+                addLogEntry('CAMERA', 'Requesting camera access...');
                 stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
                 video.srcObject = stream;
-                responseText.value = "Camera access granted";
+                updateStatus(cameraStatus, 'online');
+                responseText.value = "Camera access granted - System ready";
+                addLogEntry('CAMERA', 'Camera access granted successfully');
             } catch (err) {
                 console.error("Error accessing camera:", err);
-                responseText.value = `Error accessing camera: ${err.name} - ${err.message}. Please ensure permissions are granted and you are on HTTPS or localhost.`;
-                alert(`Error accessing camera: ${err.name}. Make sure you've granted permission and are on HTTPS or localhost.`);
+                updateStatus(cameraStatus, 'offline');
+                responseText.value = `Camera Error: ${err.name} - ${err.message}`;
+                addLogEntry('ERROR', `Camera access failed: ${err.name}`);
+                alert(`Camera Error: ${err.name}. Ensure permissions are granted and you're on HTTPS or localhost.`);
             }
         }
 
@@ -324,48 +599,61 @@
 
             if (!imageBase64URL) {
                 responseText.value = "Failed to capture image. Stream might not be active.";
-                // Optionally stop processing if image capture fails consistently
-                // handleStop();
+                addLogEntry('ERROR', 'Image capture failed - stream inactive');
+                totalErrors++;
+                updateMetrics();
                 return;
             }
 
-            const payload = {
-                instruction: instruction,
-                imageBase64URL: imageBase64URL
-            };
-
             try {
-                const response = await sendChatCompletionRequest(payload.instruction, payload.imageBase64URL);
+                updateStatus(processingStatus, 'warning');
+                const response = await sendChatCompletionRequest(instruction, imageBase64URL);
                 responseText.value = response;
+                updateStatus(processingStatus, 'online');
+                totalFrames++;
+                addLogEntry('PROCESS', `Frame ${totalFrames} analyzed successfully`);
             } catch (error) {
                 console.error('Error sending data:', error);
                 responseText.value = `Error: ${error.message}`;
+                updateStatus(processingStatus, 'offline');
+                totalErrors++;
+                addLogEntry('ERROR', `Processing failed: ${error.message}`);
             }
+            
+            updateMetrics();
         }
 
         function handleStart() {
             if (!stream) {
-                responseText.value = "Camera not available. Cannot start.";
+                responseText.value = "Camera not available. Cannot start analysis.";
+                addLogEntry('ERROR', 'Cannot start - camera not available');
                 alert("Camera not available. Please grant permission first.");
                 return;
             }
+
             isProcessing = true;
-            startButton.textContent = "Stop";
+            sessionStartTime = Date.now();
+            totalFrames = 0;
+            totalErrors = 0;
+            
+            startButton.textContent = "Stop Analysis";
             startButton.classList.remove('start');
             startButton.classList.add('stop');
 
             instructionText.disabled = true;
             intervalSelect.disabled = true;
 
-            responseText.value = "Processing started...";
+            responseText.value = "Analysis started...";
+            updateStatus(processingStatus, 'warning');
+            addLogEntry('SYSTEM', 'Vision analysis started');
 
             const intervalMs = parseInt(intervalSelect.value, 10);
             
-            // Initial immediate call
+            sessionTimerInterval = setInterval(updateSessionTimer, 1000);
             sendData(); 
-            
-            // Then set interval
             intervalId = setInterval(sendData, intervalMs);
+            
+            updateMetrics();
         }
 
         function handleStop() {
@@ -374,16 +662,31 @@
                 clearInterval(intervalId);
                 intervalId = null;
             }
-            startButton.textContent = "Start";
+            if (sessionTimerInterval) {
+                clearInterval(sessionTimerInterval);
+                sessionTimerInterval = null;
+            }
+
+            startButton.textContent = "Start Analysis";
             startButton.classList.remove('stop');
             startButton.classList.add('start');
 
             instructionText.disabled = false;
             intervalSelect.disabled = false;
-            if (responseText.value.startsWith("Processing started...")) {
-                responseText.value = "Processing stopped.";
+            updateStatus(processingStatus, 'offline');
+            
+            if (responseText.value.startsWith("Analysis started...")) {
+                responseText.value = "Analysis stopped.";
             }
+            
+            addLogEntry('SYSTEM', `Analysis stopped - ${totalFrames} frames processed, ${totalErrors} errors`);
+            updateMetrics();
         }
+
+        baseURL.addEventListener('input', () => {
+            updateStatus(serverStatus, 'offline');
+            addLogEntry('CONFIG', 'API endpoint updated');
+        });
 
         startButton.addEventListener('click', () => {
             if (isProcessing) {
@@ -393,16 +696,20 @@
             }
         });
 
-        // Initialize camera when the page loads
-        window.addEventListener('DOMContentLoaded', initCamera);
+        window.addEventListener('DOMContentLoaded', () => {
+            initCamera();
+            updateMetrics();
+        });
 
-        // Optional: Stop stream when page is closed/navigated away to release camera
         window.addEventListener('beforeunload', () => {
             if (stream) {
                 stream.getTracks().forEach(track => track.stop());
             }
             if (intervalId) {
                 clearInterval(intervalId);
+            }
+            if (sessionTimerInterval) {
+                clearInterval(sessionTimerInterval);
             }
         });
 
