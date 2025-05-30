@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ReelTek</title>
+    <style>
+        :root {
+            --primary-bg: #1a1b1e;
+            --secondary-bg: #2a2b2e;
+            --border-color: #3a3b3e;
+            --text-color: #e0e0e0;
+            --text-muted: #a0a0a0;
+            --accent-color: #64b5f6;
+            --success-color: #4caf50;
+            --danger-color: #f44336;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+            --input-bg: #2f3033;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            margin: 0;
+            min-height: 100vh;
+            padding: 20px 0;
+            background-color: var(--primary-bg);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            padding: 0 20px;
+        }
+
+        h1 {
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin: 0 0 15px 0;
+            color: var(--accent-color);
+            text-align: center;
+            letter-spacing: -0.5px;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1.5fr 1fr;
+            gap: 30px;
+            align-items: start;
+        }
+
+        .video-section {
+            background: var(--secondary-bg);
+            padding: 0;
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+        }
+
+        #videoFeed {
+            width: 100%;
+            height: 100%;
+            aspect-ratio: 16/9;
+            border-radius: 0;
+            background-color: #000000;
+            border: none;
+            display: block;
+            object-fit: cover;
+        }
+
+        .controls-section {
+            background: var(--secondary-bg);
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        label {
+            font-weight: 500;
+            color: var(--accent-color);
+            font-size: 0.95rem;
+            letter-spacing: 0.3px;
+        }
+
+        input, textarea, select {
+            padding: 14px;
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            font-size: 0.95rem;
+            background: var(--input-bg);
+            color: var(--text-color);
+            transition: all 0.2s ease;
+        }
+
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 2px rgba(100, 181, 246, 0.2);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 80px;
+            line-height: 1.6;
+        }
+
+        #responseText {
+            background-color: var(--input-bg);
+            font-family: 'Consolas', 'Monaco', monospace;
+        }
+
+        .action-controls {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            margin-top: 10px;
+        }
+
+        select {
+            padding: 12px;
+            min-width: 120px;
+            cursor: pointer;
+        }
+
+        #startButton {
+            padding: 14px 28px;
+            font-size: 1rem;
+            font-weight: 500;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            flex: 1;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        #startButton.start {
+            background-color: var(--success-color);
+            color: white;
+        }
+
+        #startButton.stop {
+            background-color: var(--danger-color);
+            color: white;
+        }
+
+        #startButton:hover {
+            transform: translateY(-2px);
+            filter: brightness(1.1);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        #startButton:active {
+            transform: translateY(0);
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        @media (max-width: 1200px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            
+            body {
+                padding: 20px;
+            }
+
+            #videoFeed {
+                aspect-ratio: 4/3;
+            }
+        }
+
+        ::placeholder {
+            color: var(--text-muted);
+        }
+
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--input-bg);
+            border-radius: 5px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--border-color);
+            border-radius: 5px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--accent-color);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>ReelTek</h1>
+        
+        <div class="main-content">
+            <div class="video-section">
+                <video id="videoFeed" autoplay playsinline></video>
+                <canvas id="canvas" class="hidden"></canvas>
+            </div>
+
+            <div class="controls-section">
+                <div class="input-group">
+                    <label for="baseURL">Base API</label>
+                    <input id="baseURL" type="text" value="http://localhost:8080">
+                </div>
+
+                <div class="input-group">
+                    <label for="instructionText">Instruction</label>
+                    <textarea id="instructionText" placeholder="Enter your instruction here..."></textarea>
+                </div>
+
+                <div class="input-group">
+                    <label for="responseText">Response</label>
+                    <textarea id="responseText" readonly placeholder="Server response will appear here..."></textarea>
+                </div>
+
+                <div class="action-controls">
+                    <select id="intervalSelect" name="Interval">
+                        <option value="100">100ms</option>
+                        <option value="250">250ms</option>
+                        <option value="500" selected>500ms</option>
+                        <option value="1000">1s</option>
+                        <option value="2000">2s</option>
+                    </select>
+                    <button id="startButton" class="start">Start</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const video = document.getElementById('videoFeed');
+        const canvas = document.getElementById('canvas');
+        const baseURL = document.getElementById('baseURL');
+        const instructionText = document.getElementById('instructionText');
+        const responseText = document.getElementById('responseText');
+        const intervalSelect = document.getElementById('intervalSelect');
+        const startButton = document.getElementById('startButton');
+
+        instructionText.value = "What do you see?"; 
+
+        let stream;
+        let intervalId;
+        let isProcessing = false;
+
+    
+        async function sendChatCompletionRequest(instruction, imageBase64URL) {
+            const response = await fetch(`${baseURL.value}/v1/chat/completions`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    max_tokens: 100,
+                    messages: [
+                        { role: 'user', content: [
+                            { type: 'text', text: instruction },
+                            { type: 'image_url', image_url: {
+                                url: imageBase64URL,
+                            } }
+                        ] },
+                    ]
+                })
+            });
+            if (!response.ok) {
+                const errorData = await response.text();
+                return `Server error: ${response.status} - ${errorData}`;
+            }
+            const data = await response.json();
+            return data.choices[0].message.content;
+        }
+
+        
+        async function initCamera() {
+            try {
+                stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
+                video.srcObject = stream;
+                responseText.value = "Camera access granted";
+            } catch (err) {
+                console.error("Error accessing camera:", err);
+                responseText.value = `Error accessing camera: ${err.name} - ${err.message}. Please ensure permissions are granted and you are on HTTPS or localhost.`;
+                alert(`Error accessing camera: ${err.name}. Make sure you've granted permission and are on HTTPS or localhost.`);
+            }
+        }
+
+        function captureImage() {
+            if (!stream || !video.videoWidth) {
+                console.warn("Video stream not ready for capture.");
+                return null;
+            }
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            const context = canvas.getContext('2d');
+            context.drawImage(video, 0, 0, canvas.width, canvas.height);
+            return canvas.toDataURL('image/jpeg', 0.8); 
+        }
+
+        async function sendData() {
+            if (!isProcessing) return; 
+
+            const instruction = instructionText.value;
+            const imageBase64URL = captureImage();
+
+            if (!imageBase64URL) {
+                responseText.value = "Failed to capture image. Stream might not be active.";
+                // Optionally stop processing if image capture fails consistently
+                // handleStop();
+                return;
+            }
+
+            const payload = {
+                instruction: instruction,
+                imageBase64URL: imageBase64URL
+            };
+
+            try {
+                const response = await sendChatCompletionRequest(payload.instruction, payload.imageBase64URL);
+                responseText.value = response;
+            } catch (error) {
+                console.error('Error sending data:', error);
+                responseText.value = `Error: ${error.message}`;
+            }
+        }
+
+        function handleStart() {
+            if (!stream) {
+                responseText.value = "Camera not available. Cannot start.";
+                alert("Camera not available. Please grant permission first.");
+                return;
+            }
+            isProcessing = true;
+            startButton.textContent = "Stop";
+            startButton.classList.remove('start');
+            startButton.classList.add('stop');
+
+            instructionText.disabled = true;
+            intervalSelect.disabled = true;
+
+            responseText.value = "Processing started...";
+
+            const intervalMs = parseInt(intervalSelect.value, 10);
+            
+            // Initial immediate call
+            sendData(); 
+            
+            // Then set interval
+            intervalId = setInterval(sendData, intervalMs);
+        }
+
+        function handleStop() {
+            isProcessing = false;
+            if (intervalId) {
+                clearInterval(intervalId);
+                intervalId = null;
+            }
+            startButton.textContent = "Start";
+            startButton.classList.remove('stop');
+            startButton.classList.add('start');
+
+            instructionText.disabled = false;
+            intervalSelect.disabled = false;
+            if (responseText.value.startsWith("Processing started...")) {
+                responseText.value = "Processing stopped.";
+            }
+        }
+
+        startButton.addEventListener('click', () => {
+            if (isProcessing) {
+                handleStop();
+            } else {
+                handleStart();
+            }
+        });
+
+        // Initialize camera when the page loads
+        window.addEventListener('DOMContentLoaded', initCamera);
+
+        // Optional: Stop stream when page is closed/navigated away to release camera
+        window.addEventListener('beforeunload', () => {
+            if (stream) {
+                stream.getTracks().forEach(track => track.stop());
+            }
+            if (intervalId) {
+                clearInterval(intervalId);
+            }
+        });
+
+    </script>
+</body>
+</html>

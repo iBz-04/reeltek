@@ -1,0 +1,21 @@
+# Llama folder
+llama-b5538-bin-win-cuda-12.4-x64/
+llama-b5538-bin-win-cuda-12.4-x64/*
+
+# System files
+.DS_Store
+Thumbs.db
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.env
+venv/
+.env.local 
