@@ -1,5 +1,9 @@
 # ReelTek Vision System
 
+``` bash 
+   .\llama-b5538-bin-win-cuda-12.4-x64\llama-server.exe -hf ggml-org/SmolVLM-500M-Instruct-GGUF -ngl 99
+```
+
 ![Demo](./demo.png)
 
 This repository showcases the `ReelTek Vision System`, a cutting-edge real-time camera analysis platform utilizing advanced vision-language models with `llama.cpp` server for object detection and scene understanding. ReelTek leverages lightweight multimodal models like `SmolVLM-500M-Instruct-GGUF` to provide real-time insights from your webcam feed through an intuitive web interface.
@@ -33,10 +37,14 @@ This repository showcases the `ReelTek Vision System`, a cutting-edge real-time 
      ```bash
      llama-server -hf ggml-org/SmolVLM-500M-Instruct-GGUF
      ```
-   - **Note for GPU Users**: If you have a compatible GPU, add the `-ngl 99` flag to enable GPU acceleration:
-     ```bash
-     llama-server -hf ggml-org/SmolVLM-500M-Instruct-GGUF -ngl 99
+     or 
+     ``` bash
+     ``` bash 
+   .\llama-b5538-bin-win-cuda-12.4-x64\llama-server.exe -hf ggml-org/SmolVLM-500M-Instruct-GGUF -ngl 99
      ```
+
+   - **Note for GPU Users**: the `-ngl 99` flag like the above is necessary to enable GPU acceleration:
+   
    - **Alternative Models**: Explore other compatible multimodal models listed in the [llama.cpp documentation](https://github.com/ggml-org/llama.cpp/blob/master/docs/multimodal.md).
 
 3. **Launch the Demo**:

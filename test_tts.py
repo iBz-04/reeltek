@@ -4,19 +4,19 @@ import time
 def test_tts_server():
     base_url = "http://localhost:5000"
     
-    print("Testing TTS Server...")
+    print("Testing Server...")
     
     # Test 1: Check status
     try:
         response = requests.get(f"{base_url}/status")
         if response.status_code == 200:
-            print("✓ Server is running")
+            print("running")
             print(f"  Status: {response.json()}")
         else:
-            print("✗ Server not responding")
+            print("Server not responding")
             return
     except:
-        print("✗ Could not connect to server. Make sure tts_server.py is running.")
+        print("Could not connect to server. Make sure tts_server.py is running.")
         return
     
     # Test 2: Get voices
