@@ -1,12 +1,15 @@
 # ReelTek Vision System
 
-``` bash 
-   .\llama-b5538-bin-win-cuda-12.4-x64\llama-server.exe -hf ggml-org/SmolVLM-500M-Instruct-GGUF -ngl 99
-```
 
-![Demo](./demo.png)
 
-This repository showcases the `ReelTek Vision System`, a cutting-edge real-time camera analysis platform utilizing advanced vision-language models with `llama.cpp` server for object detection and scene understanding. ReelTek leverages lightweight multimodal models like `SmolVLM-500M-Instruct-GGUF` to provide real-time insights from your webcam feed through an intuitive web interface.
+This repo showcases the `ReelTek Vision System`,  real-time camera analysis platform utilizing local vision-language models with `llama.cpp` server scene understanding. ReelTek uses `SmolVLM` and `TTS` to provide realtime insights from your webcam feed
+
+![Demo](./ui.png)
+
+- EXAMPLE: 
+
+![Demo](./example.jpg)
+
 
 ## Features
 
@@ -37,11 +40,12 @@ This repository showcases the `ReelTek Vision System`, a cutting-edge real-time 
      ```bash
      llama-server -hf ggml-org/SmolVLM-500M-Instruct-GGUF
      ```
-     or 
-     ``` bash
-     ``` bash 
-   .\llama-b5538-bin-win-cuda-12.4-x64\llama-server.exe -hf ggml-org/SmolVLM-500M-Instruct-GGUF -ngl 99
+   - OR 
+    ```bash
+     .\llama-b5538-bin-win-cuda-12.4-x64\llama-server.exe -hf ggml-org/SmolVLM-500M-Instruct-GGUF -ngl 99
      ```
+
+
 
    - **Note for GPU Users**: the `-ngl 99` flag like the above is necessary to enable GPU acceleration:
    
@@ -66,11 +70,11 @@ This repository showcases the `ReelTek Vision System`, a cutting-edge real-time 
 ### Speech Synthesis Options
 
 1. **Browser TTS** (Default): Works immediately, no setup required
-2. **Python TTS** (Optional): For better voice quality, see [SPEECH_SYNTHESIS_README.md](./SPEECH_SYNTHESIS_README.md)
+2. **Python TTS** (Optional): For better voice quality, see 
 
 ## Customization
 
-- **Model Selection**: You can switch to other vision-language models supported by `llama.cpp` by changing the model name in the server command. Refer to the linked documentation for options.
+- **Model Selection**: You can switch to other vision-language models supported by `llama.cpp` by changing the model name in the server command. 
 - **Instruction Tuning**: Experiment with different prompts in the interface to get varied outputs, such as detailed descriptions, specific object focus, or structured formats like JSON.
 
 ## Troubleshooting
