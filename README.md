@@ -6,10 +6,6 @@ This repo showcases the `ReelTek Vision System`,  real-time camera analysis plat
 
 ![Demo](./ui.png)
 
-- EXAMPLE: 
-
-![Demo](./example.jpg)
-
 
 ## Features
 
